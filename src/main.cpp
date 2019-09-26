@@ -26,7 +26,7 @@ struct GrpHeader : BaseHeader<GrpHeader<enablePadding>>
   uint8_t b;
 };
 
-#pragma pack(1)
+#pragma pack(push, 1)
 
 template <>
 struct GrpHeader<true> : BaseHeader<GrpHeader<true>>
@@ -40,7 +40,7 @@ struct GrpHeader<true> : BaseHeader<GrpHeader<true>>
   uint8_t b;
 };
 
-#pragma pack(4)
+#pragma pack(pop)
 
 int main(void)
 {
