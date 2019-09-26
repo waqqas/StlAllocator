@@ -9,18 +9,15 @@ struct BaseHeader
 {
   void print_header()
   {
-    static_cast<H *>(this)->print();
+    H* header = static_cast<H *>(this);
+    std::cout << "a: " << header->a << std::endl;
+    std::cout << "b: " << header->b << std::endl;
   }
 };
 
 template <bool enablePadding = false>
-struct GrpHeader : BaseHeader<GrpHeader<>>
+struct GrpHeader : BaseHeader<GrpHeader<enablePadding>>
 {
-  void print()
-  {
-    std::cout << a << " " << b << std::endl;
-  }
-
   GrpHeader()
     : a(0)
     , b(1)
@@ -34,10 +31,6 @@ struct GrpHeader : BaseHeader<GrpHeader<>>
 template <>
 struct GrpHeader<true> : BaseHeader<GrpHeader<true>>
 {
-  void print()
-  {
-    std::cout << a << " " << b << std::endl;
-  }
   GrpHeader()
     : a(2)
     , b(3)
@@ -51,25 +44,13 @@ struct GrpHeader<true> : BaseHeader<GrpHeader<true>>
 
 int main(void)
 {
-  // std::vector<int32_t, Faster::HotAllocator<int32_t>> v1;
-  // for(int32_t count = 0; count < 10; count++)
-  // {
-  //   v1.push_back(count);
-  // }
 
-  // while(v1.size()> 0)
-  // {
-  //   std::cout << v1.back() << std::endl;
-  //   v1.pop_back();
-  // }
   GrpHeader<> a;
   std::cout << "size of foo: " << sizeof(a) << std::endl;
-  // a.print();s
   a.print_header();
 
   GrpHeader<true> b;
   std::cout << "size of foo: " << sizeof(b) << std::endl;
-  // b.print();
   b.print_header();
 
   return 0;
