@@ -9,7 +9,7 @@ struct BaseHeader
 {
   void print_header()
   {
-    H* header = static_cast<H *>(this);
+    H *header = static_cast<H *>(this);
     std::cout << "a: " << header->a << std::endl;
     std::cout << "b: " << header->b << std::endl;
   }
@@ -20,10 +20,10 @@ struct GrpHeader : BaseHeader<GrpHeader<enablePadding>>
 {
   GrpHeader()
     : a(0)
-    , b(1)
+    , b('0')
   {}
   uint16_t a;
-  uint16_t b;
+  uint8_t b;
 };
 
 #pragma pack(1)
@@ -32,12 +32,12 @@ template <>
 struct GrpHeader<true> : BaseHeader<GrpHeader<true>>
 {
   GrpHeader()
-    : a(2)
-    , b(3)
+    : a(1)
+    , b('1')
   {}
   uint16_t a;
   uint8_t  padding[5];
-  uint16_t b;
+  uint8_t b;
 };
 
 #pragma pack(4)
