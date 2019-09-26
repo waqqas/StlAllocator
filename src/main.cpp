@@ -4,14 +4,24 @@
 #include <type_traits>
 #include <vector>
 
-template <bool enablePadding = false>
-struct Header
+template <typename H>
+struct BaseHeader
 {
-  void print(){
+  void print_header()
+  {
+    static_cast<H *>(this)->print();
+  }
+};
+
+template <bool enablePadding = false>
+struct GrpHeader : BaseHeader<GrpHeader<>>
+{
+  void print()
+  {
     std::cout << a << " " << b << std::endl;
   }
 
-  Header()
+  GrpHeader()
     : a(0)
     , b(1)
   {}
@@ -22,12 +32,13 @@ struct Header
 #pragma pack(1)
 
 template <>
-struct Header<true>
+struct GrpHeader<true> : BaseHeader<GrpHeader<true>>
 {
-  void print(){
+  void print()
+  {
     std::cout << a << " " << b << std::endl;
   }
-  Header()
+  GrpHeader()
     : a(2)
     , b(3)
   {}
@@ -51,13 +62,15 @@ int main(void)
   //   std::cout << v1.back() << std::endl;
   //   v1.pop_back();
   // }
-  Header<> a;
+  GrpHeader<> a;
   std::cout << "size of foo: " << sizeof(a) << std::endl;
-  a.print();
+  // a.print();s
+  a.print_header();
 
-  Header<true> b;
+  GrpHeader<true> b;
   std::cout << "size of foo: " << sizeof(b) << std::endl;
-  b.print();
+  // b.print();
+  b.print_header();
 
   return 0;
 }
