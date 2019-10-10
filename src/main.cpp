@@ -1,57 +1,23 @@
-#include "HotAllocator.h"
-
+#include "SecurityHasher.h"
 #include <iostream>
-#include <type_traits>
-#include <vector>
 
-template <typename H>
-struct BaseHeader
-{
-  void print_header()
-  {
-    H *header = static_cast<H *>(this);
-    std::cout << "a: " << header->a << std::endl;
-    std::cout << "b: " << header->b << std::endl;
-  }
-};
 
-template <bool enablePadding = false>
-struct GrpHeader : BaseHeader<GrpHeader<enablePadding>>
-{
-  GrpHeader()
-    : a(0)
-    , b('0')
-  {}
-  uint16_t a;
-  uint8_t b;
-};
-
-#pragma pack(push, 1)
-
-template <>
-struct GrpHeader<true> : BaseHeader<GrpHeader<true>>
-{
-  GrpHeader()
-    : a(1)
-    , b('1')
-  {}
-  uint16_t a;
-  uint8_t  padding[5];
-  uint8_t b;
-};
-
-#pragma pack(pop)
 
 int main(void)
 {
+  security_map map;
+  map[1] = 1;
+  map[2] = 2;
 
-  GrpHeader<> a;
-  std::cout << "size of foo: " << sizeof(a) << std::endl;
-  a.print_header();
+  for (const auto &item : map)
+  {
+    std::cout << "Key:[" << item.first << "] Value:[" << item.second << "]\n";
+  }
 
-  GrpHeader<true> b;
-  std::cout << "size of foo: " << sizeof(b) << std::endl;
-  b.print_header();
-
+  std::cout << "bucket count: " << map.bucket_count() << std::endl;
+  for(security_map::size_type bucket_number = 0; bucket_number < map.bucket_count(); ++bucket_number)
+  {
+    std::cout << "bucket: " << bucket_number << " size: " << map.bucket_size(bucket_number) << std::endl;    
+  }
   return 0;
 }

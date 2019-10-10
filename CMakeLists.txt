@@ -8,3 +8,5 @@ include_directories("${CMAKE_SOURCE_DIR}/src")
 
 file(GLOB sources src/*.cpp src/*.h)
 add_executable(app ${sources})
+
+add_subdirectory(benchmarks)
