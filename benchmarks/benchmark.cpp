@@ -1,7 +1,6 @@
 #include "benchmark/benchmark.h"
 
 #include "SecurityHasher.h"
-#include <iostream>
 
 using standard_map = std::unordered_map<int32_t, uint64_t>;
 
@@ -26,7 +25,7 @@ void BM_find(benchmark::State &state)
   int32_t key = 0;
   int64_t value = 0;
   size_t size = state.range(0);
-  // std::cout << "size: " << size << std::endl;
+
   for(size_t key = 0; key < size; ++key)
   {
     map.insert({key,value});
@@ -35,7 +34,6 @@ void BM_find(benchmark::State &state)
   key = 0;
   for (auto _ : state)
   {
-    // std::cout << "key: " << key << std::endl;
     benchmark::DoNotOptimize(map.find(key));
     ++key;
     key %= size;
