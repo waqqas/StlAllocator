@@ -3,6 +3,7 @@ project(BenchProject)
 include(ExternalProject)
 
 set(EXTERNAL_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/external)
+
 ExternalProject_Add(benchmark 
     GIT_REPOSITORY https://github.com/google/benchmark
     CMAKE_ARGS 
@@ -15,7 +16,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
 link_directories(${EXTERNAL_INSTALL_LOCATION}/lib)
 
-
-add_executable(benchmarks benchmark.cpp)
-add_dependencies(benchmarks benchmark)
-target_link_libraries(benchmarks libbenchmark.a pthread)
+add_executable(bench benchmark.cpp)
+add_dependencies(bench benchmark)
+target_link_libraries(bench libbenchmark.a )
+target_link_libraries(bench pthread)
