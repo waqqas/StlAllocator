@@ -1,10 +1,15 @@
 #include "benchmark/benchmark.h"
 
 #include "SecurityHasher.h"
+#include <iostream>
 
-static void BM_security_map(benchmark::State &state)
+using standard_map = std::unordered_map<int32_t, uint64_t>;
+
+
+template <class Map> 
+void BM_insert(benchmark::State &state)
 {
-  security_map map;
+  Map map;
   int32_t key = 0;
   int64_t value = 0;
   for (auto _ : state)
@@ -14,19 +19,34 @@ static void BM_security_map(benchmark::State &state)
   }
 }
 
-static void BM_unordered_map(benchmark::State &state)
+template <class Map> 
+void BM_find(benchmark::State &state)
 {
-  std::unordered_map<int32_t, uint64_t> map;
+  Map map;
   int32_t key = 0;
   int64_t value = 0;
+  size_t size = state.range(0);
+  // std::cout << "size: " << size << std::endl;
+  for(size_t key = 0; key < size; ++key)
+  {
+    map.insert({key,value});
+  }
+
+  key = 0;
   for (auto _ : state)
   {
-    map.insert({key, value});
+    // std::cout << "key: " << key << std::endl;
+    benchmark::DoNotOptimize(map.find(key));
     ++key;
+    key %= size;
   }
 }
 
-BENCHMARK(BM_security_map);
-BENCHMARK(BM_unordered_map);
 
+BENCHMARK_TEMPLATE1(BM_insert, security_map);
+BENCHMARK_TEMPLATE1(BM_insert, standard_map);
+
+
+BENCHMARK_TEMPLATE1(BM_find, security_map)->Range(1 << 8, 1 << 18);
+BENCHMARK_TEMPLATE1(BM_find, standard_map)->Range(1 << 8, 1 << 18);
 BENCHMARK_MAIN();
