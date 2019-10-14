@@ -12,4 +12,4 @@ public:
   }
 };
 
-using security_map = std::unordered_map<int32_t, uint64_t, SecurityHasher<int32_t>>;
+using security_map = std::unordered_map<int32_t, uint64_t, SecurityHasher<int32_t> >;

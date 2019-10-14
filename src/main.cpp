@@ -1,7 +1,6 @@
 #include "SecurityHasher.h"
+
 #include <iostream>
-
-
 
 int main(void)
 {
@@ -15,9 +14,11 @@ int main(void)
   }
 
   std::cout << "bucket count: " << map.bucket_count() << std::endl;
-  for(security_map::size_type bucket_number = 0; bucket_number < map.bucket_count(); ++bucket_number)
+  for (security_map::size_type bucket_number = 0; bucket_number < map.bucket_count();
+       ++bucket_number)
   {
-    std::cout << "bucket: " << bucket_number << " size: " << map.bucket_size(bucket_number) << std::endl;    
+    std::cout << "bucket: " << bucket_number << " size: " << map.bucket_size(bucket_number)
+              << std::endl;
   }
   return 0;
 }
